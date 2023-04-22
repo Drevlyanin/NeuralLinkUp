@@ -7,11 +7,11 @@ app_secret = 'YOUR_APP_SECRET'
 access_token = app_id + '|' + app_secret
 
 graph = facebook.GraphAPI(access_token=access_token, version="12.0")
-graph.put_photo(image=open('image.jpg', 'rb'), message='Text message')
+graph.put_photo(image=open('image.jpg', 'rb'), message='text')
 
 try:
-    post_id = graph.put_photo(image=open('image.jpg', 'rb'), message='Text message')
+    post_id = graph.put_photo(image=open('image.jpg', 'rb'), message='text')
     if post_id:
-        print('The photo and text were successfully posted on Facebook!')
+        print('error')
 except Exception as e:
     print(f"Error: {e}")
