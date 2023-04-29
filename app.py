@@ -1,15 +1,33 @@
-import facebook 
-import requests
+import json
+import time
+import urllib.request
+from facebook_business.api import FacebookAdsApi
+from facebook_business.adobjects.page import Page
 
-app_id = 'YOUR_APP_ID'
-app_secret = 'YOUR_APP_SECRET'
-access_token = app_id + '|' + app_secret
+access_token = ''
+app_secret = ''
+app_id = ''
+PAGE_ID = ''
 
-graph = facebook.GraphAPI(access_token=access_token, version="12.0")
+FacebookAdsApi.init(access_token=access_token)
 
-try:
-    post_id = graph.put_photo(image=open('image.jpg', 'rb'), message='text')
-    if post_id:
-        print('Photo posted successfully on Facebook.')
-except Exception as e:
-    print(f"Error: {e}")
+page = Page(PAGE_ID)
+
+with open('posts.json', 'r') as f:
+    posts = json.load(f)
+
+for post in posts:
+    try:
+        image_name = 'image.jpg'
+        urllib.request.urlretrieve(post['photo_url'], image_name)
+
+        page.create_photo(
+            image=open(image_name, 'rb'),
+            message=post['message'],
+            published=True
+        )
+
+        time.sleep(60)
+
+    except Exception as e:
+        print(f'Ошибка публикации сообщения в Facebook: {e}')
